@@ -39,7 +39,7 @@ const Checkout = () => {
         e.preventDefault();
 
         const { data } = await axios.post(
-            "http://localhost:5000/create-order",
+            "https://shopping-cart-71pr.onrender.com/create-order",
             {
                 amount: 1,
             }
