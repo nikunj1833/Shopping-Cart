@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+
+@keyframes batSwing {
+    0% {
+        transform: scale(1);
+    }
+
+    20% {
+        transform: scale(1.35);
+    }
+
+    40% {
+        transform: scale(1.35) rotate(-22deg);
+    }
+
+    60% {
+        transform: scale(1.35) rotate(18deg);
+    }
+
+    80% {
+        transform: scale(1.35) rotate(-10deg);
+    }
+
+    100% {
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+.group:hover .bat-swing {
+    animation: batSwing 1.2s ease-in-out;
+    transform-origin: bottom center;
+}
