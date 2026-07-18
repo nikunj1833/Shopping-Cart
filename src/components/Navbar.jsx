@@ -3,10 +3,12 @@ import { Home, ShoppingCart } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import SearchFilter from './SearchFilter'
 import { useCart } from '../context/CartContext'
-
+import { logout } from "../services/auth";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
   const { cartCount } = useCart();
+  const { user } = useAuth();
   return (
     <>
       <header className='sticky top-0 z-50 bg-gray-950/95 backdrop-blur-md text-white shadow-2xl shadow-gray-950/70 border-b border-orange-900'>
@@ -35,14 +37,41 @@ const Navbar = () => {
               </h1>
             </div>
           </Link>
-          <nav className='flex items-center space-x-6'>
-            <Link to={'/cart'} className='relative p-3 bg-orange-500/10 rounded-xl hover:bg-orange-500/20 transition duration-200 border border-orange-400/50 shadow-lg cursor-pointer'>
-              <ShoppingCart className='w-6 h-6 text-orange-400 ' />
-              {cartCount > 0 && (<span className='absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none  text-white transform translate-x-1/2 bg-red-600 rounded-full min-w-[24px] h-[20px] -translate-y-1/2'>
-                {cartCount}
-              </span>)}
+
+          <nav className='flex items-center space-x-4'>
+
+            <Link
+              to={'/cart'}
+              className='relative p-3 bg-orange-500/10 rounded-xl hover:bg-orange-500/20 transition duration-200 border border-orange-400/50 shadow-lg cursor-pointer'
+            >
+              <ShoppingCart className='w-6 h-6 text-orange-400' />
+
+              {cartCount > 0 && (
+                <span className='absolute top-0 right-0 flex items-center justify-center text-xs font-bold text-white bg-red-600 rounded-full w-5 h-5 translate-x-1/2 -translate-y-1/2'>
+                  {cartCount}
+                </span>
+              )}
             </Link>
+
+
+            {user ? (
+              <button
+                onClick={logout}
+                className="px-4 py-2 rounded-xl bg-red-600 text-white font-bold hover:bg-red-700 transition shadow-lg"
+              >
+                Logout
+              </button>
+            ) : (
+              <Link
+                to="/login"
+                className="px-4 py-2 rounded-xl bg-yellow-500 text-black font-bold hover:bg-yellow-400 transition shadow-lg"
+              >
+                Login
+              </Link>
+            )}
+
           </nav>
+
         </div>
 
       </header>

@@ -1,11 +1,14 @@
 import { createContext, useContext } from "react";
 import { initialProducts } from "../data/product";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-    const [cart, setCart] = useState([])
+    const [cart, setCart] = useState(() => {
+        const savedCart = localStorage.getItem("cart");
+        return savedCart ? JSON.parse(savedCart) : [];
+    });
 
     const products = initialProducts;
     //add item cart 
@@ -71,6 +74,10 @@ export const CartProvider = ({ children }) => {
         [cart]
     );
 
+
+    useEffect(() => {
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }, [cart]);
 
 
     return (

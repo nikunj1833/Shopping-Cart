@@ -5,6 +5,11 @@ import OrderConfimation from '../pages/OrderConform';
 import { Link } from "react-router-dom";
 
 import { Package, MapPin, Zap } from "lucide-react";
+import { auth } from "../firebase";
+import { saveOrder } from "../services/firestore";
+import axios from "axios";
+
+
 
 const Checkout = () => {
     const { cartTotal, clearCart, cart } = useCart();
@@ -26,10 +31,64 @@ const Checkout = () => {
         setDeliveryDetails((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSumbit = (e) => {
+
+
+
+
+    const handleSumbit = async (e) => {
         e.preventDefault();
-        clearCart();
-        setIsConfirmed(true);
+
+        const { data } = await axios.post(
+            "http://localhost:5000/create-order",
+            {
+                amount: 1,
+            }
+        );
+
+        const options = {
+            key: import.meta.env.VITE_RAZORPAY_KEY,
+            amount: data.amount,
+            currency: data.currency,
+            name: "ONE8THIRTY",
+            description: "Shopping Order",
+            order_id: data.id,
+
+            handler: async function (response) {
+                try {
+                    await saveOrder({
+                        uid: auth.currentUser.uid,
+                        customerName: deliveryDetails.name,
+                        address: deliveryDetails.address,
+                        city: deliveryDetails.city,
+                        zip: deliveryDetails.zip,
+                        items: cart,
+                        total: cartTotal,
+                        paymentId: response.razorpay_payment_id,
+                        orderId: response.razorpay_order_id,
+                        paymentStatus: "Paid",
+                        orderStatus: "Placed",
+                    });
+
+                    clearCart();
+                    setIsConfirmed(true);
+                } catch (error) {
+                    console.error(error);
+                }
+            },
+
+            prefill: {
+                name: deliveryDetails.name,
+                email: auth.currentUser.email,
+            },
+
+            theme: {
+                color: "#f97316",
+            },
+        };
+
+        // ✅ ADD THIS
+        const razor = new window.Razorpay(options);
+        razor.open();
     };
 
     console.log("shipping data = ", deliveryDetails);
