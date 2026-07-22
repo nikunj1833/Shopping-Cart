@@ -7,6 +7,7 @@ import {
     onAuthStateChanged,
     updateProfile,
 } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 import { auth } from "../firebase";
 
@@ -26,6 +27,18 @@ export const signup = async (name, email, password) => {
 
     return userCredential.user;
 };
+// Google Login
+export const googleLogin = async () => {
+    const provider = new GoogleAuthProvider();
+
+    const result = await signInWithPopup(
+        auth,
+        provider
+    );
+
+    return result.user;
+};
+
 
 // Login
 export const login = async (email, password) => {

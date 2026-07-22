@@ -1,93 +1,191 @@
-import React, { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { initialProducts } from '../data/product'
-import { ChevronLeft, Tag, Zap, ShoppingCart } from 'lucide-react'
-import { useCart } from '../context/CartContext'
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { initialProducts } from "../data/product";
+import {
+  ChevronLeft,
+  Tag,
+  ShoppingCart,
+  ShieldCheck,
+  Truck,
+  RotateCcw,
+  Star,
+} from "lucide-react";
+import { useCart } from "../context/CartContext";
 
 const ProductDetails = () => {
-  const [product, setProduct] = useState()
+  const [product, setProduct] = useState();
   const { id } = useParams();
-
 
   const { addToCart } = useCart();
 
   useEffect(() => {
-    setProduct(initialProducts.find(data => data.id == id))
-  }, [id])
-
-
+    setProduct(initialProducts.find((data) => data.id == id));
+  }, [id]);
 
   if (!product) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-white">
+      <div className="min-h-screen flex items-center justify-center text-2xl font-bold text-blue-600">
         Loading...
       </div>
     );
   }
 
-
-
-
   return (
-    <>
+    <div className="min-h-screen bg-gradient-to-br from-[#eef6ff] via-[#f8fbff] to-white py-10">
 
-      <div className="container mx-auto px-4 md:px-8 bg-gray-900  min-h-screen rounded-2xl shadow-2xl my-8 p-6 md:p-12 border border-gray-800">
-        <Link to={'/'}>
-          <button className='flex cursor-pointer items-center text-gray-400 hover:text-orange-400 transition duration-150 mb-12 font-semibold  text-lg'>
-            <ChevronLeft className='w-6 h-6 mr-1' />
-            <span>Back to All Products</span>
-          </button>
+      <div className="max-w-7xl mx-auto px-5">
+
+        {/* Back */}
+
+        <Link
+          to="/"
+          className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-semibold mb-8"
+        >
+          <ChevronLeft size={20} />
+          Back to Products
         </Link>
 
-        <div className='grid grid-cols-1 lg:grid-cols-2 gap-1'>
-          <div className='w-full'>
-            <img src={product.image} alt={product.name} className='w-[400px] h-[400px] object-cover rounded-2xl  shadow-2xl shadow-gray-950/50 border-4 border-gray-800' />
-          </div>
+        {/* Card */}
 
-          <div className='flex flex-col justify-between'>
-            <div>
-              <h1 className='text-4xl font-extrabold text-white mb-4 leading-tight'>{product.name}</h1>
+        <div className="bg-white rounded-3xl shadow-xl border border-blue-100 overflow-hidden">
+
+          <div className="grid lg:grid-cols-2 gap-10 p-6 md:p-10">
+
+            {/* Image */}
+
+            <div className="bg-gradient-to-br from-blue-50 to-white rounded-3xl flex items-center justify-center p-10">
+
+              <img
+                src={product.image}
+                alt={product.name}
+                className="w-full max-w-md h-[420px] object-contain hover:scale-105 transition duration-500"
+              />
+
             </div>
-            <p className=' text-3xl font-extrabold text-orange-400 mb-4'>₹{product.price.toFixed(2)}</p>
-            <h2 className='text-xl font-bold text-gray-200 mb-2 border-b border-orange-900/50 pb-2 flex items-center space-x-2'>
-              <Tag className='w-5 h-5 text-orange-500/50' />
-              <span>Product Overview</span>
-            </h2>
-            <p className='text-gray-500 text-lg leading-relaxed mb-3'>{product.description}</p>
-            <ul className='space-y-3 text-gray-300 p-4 bg-gray-800 rounded-xl border border-gray-700'>
 
-              <li className='flex items-center space-x-3 text-lg'>
-                <Zap className='w-5 h-5 text-orange-500' />
-                <span>High-Quality, Professional Grade Meterials</span>
-              </li>
+            {/* Info */}
 
-              <li className='flex items-center space-x-3 text-lg'>
-                <Zap className='w-5 h-5 text-orange-500' />
-                <span>Comprehensive 1-Year Manufacture Warranty</span>
-              </li>
+            <div className="flex flex-col">
 
-              <li className='flex items-center space-x-3 text-lg'>
-                <Zap className='w-5 h-5 text-orange-500' />
-                <span>Immediate Shipping for In-Stock Items</span>
-              </li>
-            </ul>
-            <div className='mt-5 space-y-4 flex justify-center items-center flex-col'>
-              <button onClick={() => addToCart(product)} className='mx-auto flex py-3 w-full bg-orange-600 text-white font-bold rounded-full shadow-lg shadow-orange-800/50 cursor-pointer hover:bg-orange-700 transition duration-300 items-center justify-center space-x-2 transform hover:ring-4 hover:ring-orange-600/50 tracking-wider uppercase'> <ShoppingCart className='w-6 h-6' />
-                <span>Add To Cart</span></button>
+              <span className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold w-fit">
+                <Tag size={16} />
+                {product.category}
+              </span>
 
-              <Link to={'/'} className='mx-auto flex py-3  w-full border-2 border-orange-600 text-orange-400 font-bold rounded-full  cursor-pointer hover:bg-orange-900/50 transition duration-300 items-center justify-center space-x-2 transform hover:ring-4 hover:ring-orange-600/50 tracking-wider uppercase'>
-                Keep Shoping
-              </Link>
+              <h1 className="text-3xl md:text-5xl font-black text-gray-900 mt-5 leading-tight">
+                {product.name}
+              </h1>
+
+              {/* Rating */}
+
+              <div className="flex items-center gap-2 mt-4">
+
+                <Star
+                  className="fill-yellow-400 text-yellow-400"
+                  size={20}
+                />
+
+                <span className="font-semibold text-gray-700">
+                  4.8
+                </span>
+
+                <span className="text-gray-400">
+                  (120 Reviews)
+                </span>
+
+              </div>
+
+              {/* Price */}
+
+              <div className="flex items-end gap-4 mt-6">
+
+                <h2 className="text-5xl font-black text-blue-700">
+                  ₹{product.price.toFixed(2)}
+                </h2>
+
+                <span className="text-xl line-through text-gray-400">
+                  ₹{Math.round(product.price * 1.25)}
+                </span>
+
+                <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-bold">
+                  20% OFF
+                </span>
+
+              </div>
+
+              {/* Description */}
+
+              <p className="mt-8 text-gray-600 leading-8 text-lg">
+                {product.description}
+              </p>
+
+              {/* Features */}
+
+              <div className="grid sm:grid-cols-3 gap-4 mt-10">
+
+                <div className="border border-blue-100 rounded-2xl p-5 text-center">
+
+                  <ShieldCheck className="mx-auto text-blue-600 mb-3" />
+
+                  <h3 className="font-bold">
+                    1 Year Warranty
+                  </h3>
+
+                </div>
+
+                <div className="border border-blue-100 rounded-2xl p-5 text-center">
+
+                  <Truck className="mx-auto text-blue-600 mb-3" />
+
+                  <h3 className="font-bold">
+                    Free Shipping
+                  </h3>
+
+                </div>
+
+                <div className="border border-blue-100 rounded-2xl p-5 text-center">
+
+                  <RotateCcw className="mx-auto text-blue-600 mb-3" />
+
+                  <h3 className="font-bold">
+                    7 Days Return
+                  </h3>
+
+                </div>
+
+              </div>
+
+              {/* Buttons */}
+
+              <div className="flex flex-col sm:flex-row gap-4 mt-10">
+
+                <button
+                  onClick={() => addToCart(product)}
+                  className="flex-1 flex items-center justify-center gap-2 py-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold transition"
+                >
+                  <ShoppingCart size={22} />
+                  Add To Cart
+                </button>
+
+                <Link
+                  to="/"
+                  className="flex-1 flex items-center justify-center py-4 rounded-2xl border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-bold transition"
+                >
+                  Continue Shopping
+                </Link>
+
+              </div>
+
             </div>
+
           </div>
 
         </div>
 
-      </div >
+      </div>
 
+    </div>
+  );
+};
 
-    </>
-  )
-}
-
-export default ProductDetails
+export default ProductDetails;
